@@ -1,10 +1,12 @@
 const Load = require('../models/Load');
 const User = require('../models/User');
+const Truck = require('../models/Truck');
 
 const changeLoadState = async (loadId, userId) => {
   try {
-    const load = await Load.findOne({_id: loadId, assigned_to: uderId});
+    const load = await Load.findById(loadId);
     const user = await User.findById(userId);
+    const truck = await Truck.findOne({'created_by': userId});
 
     if (load) {
       if (load.state === 'En route to pick up') {
@@ -21,13 +23,15 @@ const changeLoadState = async (loadId, userId) => {
         load.save();
         user.status = 'ready';
         user.save();
+        truck.status = 'created';
+        truck.save();
         return true;
       }
     } else {
       return false;
     }
   } catch (e) {
-    return res.status(404).json({message: e.name});
+    return false;
   }
 };
 

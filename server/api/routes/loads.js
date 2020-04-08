@@ -123,7 +123,8 @@ router.patch('/loads/:id/state', async (req, res) => {
     const loadId = req.params.id;
     const token = req.headers.authorization;
     const {userId} = jwt.verify(token, secret);
-    const isSuccess = changeLoadState(loadId, userId);
+
+    const isSuccess = await changeLoadState(loadId, userId);
 
     if (isSuccess) {
       return res.status(200).json({

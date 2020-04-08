@@ -9,7 +9,7 @@ const findTruck = async (id) => {
     const load = await Load.findById(id);
 
     load.status = 'posted';
-    load.save();
+    // load.save();
 
 
     const allTrucks = await Truck.find({status: 'inService'});
@@ -45,11 +45,12 @@ const findTruck = async (id) => {
     load.status = 'assigned';
     load.state = 'En route to pick up';
     load.assigned_to = assignedTruck.created_by;
-    await load.save();
+    load.save();
 
     assignedTruck.status = 'onLoad';
     assignedTruck.assigned_to = load._id;
-    await assignedTruck.save();
+    assignedTruck.save();
+
 
     const userId = assignedTruck.created_by;
     const user = await User.findById(userId);
